@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pentafy/auth-feature/screens/login_screen.dart';
 
+import 'package:pentafy/home-feature/screens/homePage.dart';
 void main() {
-  runApp(const MyApp());
+  runApp(const HomePage());
 }
 
 // Parent Widget Tempat Penyimpanan Global State
