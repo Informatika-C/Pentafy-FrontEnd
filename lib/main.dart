@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'auth-feature/chatting-feature/chatt.dart';
+// import 'auth-feature/chatting-feature/overlay.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChattingApp());
 }
 
 class MyApp extends StatelessWidget {
