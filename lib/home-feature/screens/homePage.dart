@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pentafy/home-feature/widgets/homeChats.dart';
 import 'package:pentafy/home-feature/widgets/homeGroups.dart';
+import 'package:pentafy/home-feature/widgets/homeContacts.dart';
+import 'package:pentafy/home-feature/widgets/changeUserStatus.dart';
+
+
+
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +29,8 @@ class _HomePageState extends State<HomePage> {
   final List<Widget Function()> homePages = [
     () => homeChats(),
     () => homeGroups(),
+    () => homeContacts(),
+
   ];
 
   int activePage = 0; // Indeks widget aktif, awalnya adalah indeks 0
@@ -34,20 +42,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     double ViewHeight = MediaQuery.of(context).size.height;
     double ViewWidth = MediaQuery.of(context).size.width;
 
-    Color userStatusColor = Colors.grey;
-    String userStatus = 'online';
-    if (userStatus == 'online') {
-      userStatusColor = Colors.green;
-    } else if (userStatus == 'offline') {
-      userStatusColor = Colors.red;
-    } else if (userStatus == 'idle') {
-      userStatusColor = Colors.yellow;
-    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -93,54 +94,58 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     children: [
                       ListTile(
-                        leading: Icon(Icons.home, color: Colors.white),
+                        leading: Icon(Icons.account_box_outlined, color: Colors.white),
                         title: Text('Pengaturan Profil',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 15,
                               color: Colors.white,
                             )),
                         onTap: () {
                           // Actions when the Home item is tapped
                         },
                       ),
+                      SizedBox(height: 5,),
                       ListTile(
-                        leading: Icon(Icons.settings, color: Colors.white),
+                        leading: Icon(Icons.account_circle, color: Colors.white),
                         title: Text('Pengaturan Akun',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 15,
                               color: Colors.white,
                             )),
                         onTap: () {
                           // Actions when the Settings item is tapped
                         },
                       ),
+                      SizedBox(height: 5,),
                       ListTile(
-                        leading: Icon(Icons.person, color: Colors.white),
+                        leading: Icon(Icons.notifications_active, color: Colors.white),
                         title: Text('Notifikasi',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 15,
                               color: Colors.white,
                             )),
                         onTap: () {
                           // Actions when the Profile item is tapped
                         },
                       ),
+                      SizedBox(height: 5,),
                       ListTile(
-                        leading: Icon(Icons.mail, color: Colors.white),
+                        leading: Icon(Icons.settings, color: Colors.white),
                         title: Text('Pengaturan Umum',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 15,
                               color: Colors.white,
                             )),
                         onTap: () {
                           // Actions when the Mail item is tapped
                         },
                       ),
+                      SizedBox(height: 5,),
                       ListTile(
-                        leading: Icon(Icons.info, color: Colors.white),
+                        leading: Icon(Icons.logout_outlined, color: Colors.white),
                         title: Text('Keluar',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 15,
                               color: Colors.white,
                             )),
                         onTap: () {
@@ -167,7 +172,7 @@ class _HomePageState extends State<HomePage> {
               Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -202,39 +207,7 @@ class _HomePageState extends State<HomePage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      TextButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          "Status ${userStatus}",
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        style: ButtonStyle(
-                                          padding: MaterialStateProperty.all(
-                                            EdgeInsets.symmetric(
-                                              horizontal: 0,
-                                              vertical: 0,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Container(
-                                        width: 10,
-                                        height: 10,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(7.5),
-                                          color: userStatusColor,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
+                                      changeUserStatus(),
                                     ],
                                   ),
                                 ],
@@ -260,8 +233,8 @@ class _HomePageState extends State<HomePage> {
                       Column(
                         children: [
                           Container(
-                            width: 60,
-                            height: 60,
+                            width: 55,
+                            height: 55,
                             decoration: BoxDecoration(
                               color: activePage == 0 ? activePageItemColor :Color.fromARGB(255, 237, 237, 237),
                               borderRadius: BorderRadius.circular(10),
@@ -290,8 +263,8 @@ class _HomePageState extends State<HomePage> {
                       Column(
                         children: [
                           Container(
-                            width: 60,
-                            height: 60,
+                            width: 55,
+                            height: 55,
                             decoration: BoxDecoration(
                               color: activePage == 1 ? activePageItemColor :  Color.fromARGB(255, 237, 237, 237),
                               borderRadius: BorderRadius.circular(10),
@@ -318,8 +291,36 @@ class _HomePageState extends State<HomePage> {
                       Column(
                         children: [
                           Container(
-                            width: 60,
-                            height: 60,
+                            width: 55,
+                            height: 55,
+                            decoration: BoxDecoration(
+                              color: activePage == 2 ? activePageItemColor: Color.fromARGB(255, 237, 237, 237),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: activePage == 2 ? Colors.white : Colors.transparent),
+                            ),
+                            child: IconButton(
+                              iconSize: 28,
+                              onPressed: () {
+                                changePage(2);
+                              },
+                              icon: Icon(Icons.contacts_rounded),
+                              color: activePage == 2 ? Colors.white:Colors.black,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            "Kontak",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            width: 55,
+                            height: 55,
                             decoration: BoxDecoration(
                               color: Color.fromARGB(255, 237, 237, 237),
                               borderRadius: BorderRadius.circular(10),
@@ -343,8 +344,8 @@ class _HomePageState extends State<HomePage> {
                       Column(
                         children: [
                           Container(
-                            width: 60,
-                            height: 60,
+                            width: 55,
+                            height: 55,
                             decoration: BoxDecoration(
                               color: Color.fromARGB(255, 237, 237, 237),
                               borderRadius: BorderRadius.circular(10),
@@ -352,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                             child: IconButton(
                               iconSize: 28,
                               onPressed: () {},
-                              icon: Icon(Icons.radio_button_checked_outlined),
+                              icon: Icon(Icons.child_care),
                               color: Colors.black,
                             ),
                           ),
@@ -365,31 +366,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 237, 237, 237),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: IconButton(
-                              iconSize: 28,
-                              onPressed: () {},
-                              icon: Icon(Icons.contacts_rounded),
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            "Kontak",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
+                      
                     ],
                   ),
                 ],

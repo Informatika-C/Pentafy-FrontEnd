@@ -19,60 +19,64 @@ class _homeGroupsState extends State<homeGroups> {
   List<bool> checkBoxStatusList = [];
   List<int> checkedItemIndex = [];
 
-  List<Widget> ChatList() {
+  List<Widget> GroupList() {
     double ViewHeight = MediaQuery.of(context).size.height;
     double ViewWidth = MediaQuery.of(context).size.width;
 
-    List<Map<String, dynamic>> chatList = [
+    List<Map<String, dynamic>> groupList = [
       {
         'groupname': 'Group Mabar ML',
         'status': 'online',
         'recentmessage':
-            'From: Fajar Kumolonimbus, mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
+            'From Fajar Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
         'unreadmessage': 5,
         'time': DateTime.now(),
+        'isUserTaged': true,
       },
       {
         'groupname': 'Group Mabar EPEP',
         'status': 'online',
         'recentmessage':
-            'From: Farhan Kumolonimbus, mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
+            'From Farhan Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
         'unreadmessage': 2,
         'time': DateTime.now(),
+        'isUserTaged': true,
       },
       {
         'groupname': 'Group Mabar PUBG',
         'status': 'online',
         'recentmessage':
-            'From: Adib Kumolonimbus, mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
+            'From Adib Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
         'unreadmessage': 0,
         'time': DateTime.now(),
+        'isUserTaged': false,
       },
       {
         'groupname': 'Group Mabar PUBG',
         'status': 'online',
         'recentmessage':
-            'From: Adit Kumolonimbus, mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
+            'From Adit Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
         'unreadmessage': 1,
         'time': DateTime.now(),
+        'isUserTaged': true,
       },
-      
     ];
 
     String formatTime(DateTime time) {
       return DateFormat('hh:mm a').format(time);
     }
 
-    for (int i = 0; i < chatList.length; i++) {
+    for (int i = 0; i < groupList.length; i++) {
       checkBoxStatusList.add(false);
     }
 
-    List<Widget> ChatListWidget = [];
+    List<Widget> GroupListWidget = [];
 
-    for (int i = 0; i < chatList.length; i++) {
-      final chatData = chatList[i];
-      ChatListWidget.add(
+    for (int i = 0; i < groupList.length; i++) {
+      final groupData = groupList[i];
+      GroupListWidget.add(
         Container(
+          padding: EdgeInsets.only(left: 10, right: 10),
           width: double.infinity,
           height: 65,
           margin: EdgeInsets.only(bottom: 20),
@@ -130,7 +134,7 @@ class _homeGroupsState extends State<homeGroups> {
                           height: 15,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(7.5),
-                            color: chatData['status'] == 'online'
+                            color: groupData['status'] == 'online'
                                 ? Colors.green
                                 : Colors.grey,
                           ),
@@ -150,7 +154,7 @@ class _homeGroupsState extends State<homeGroups> {
                           height: 3,
                         ),
                         Text(
-                          chatData['groupname'],
+                          groupData['groupname'],
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
@@ -160,7 +164,7 @@ class _homeGroupsState extends State<homeGroups> {
                           height: 3,
                         ),
                         Text(
-                          chatData['recentmessage'],
+                          groupData['recentmessage'],
                           maxLines: 2,
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
@@ -174,24 +178,44 @@ class _homeGroupsState extends State<homeGroups> {
               Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: chatData['unreadmessage'] > 0
+                  mainAxisAlignment: groupData['unreadmessage'] > 0
                       ? MainAxisAlignment.spaceBetween
                       : MainAxisAlignment.end,
                   children: [
-                    if (chatData['unreadmessage'] > 0)
-                      Container(
-                        height: 20,
-                        width: 20,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text("${chatData['unreadmessage']}",),
-                      ),
+                    Row(
+                      children: [
+                        if (groupData['isUserTaged'])
+                          Container(
+                            height: 20,
+                            width: 20,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              "#",
+                            ),
+                          ),
+                          SizedBox(width: 2,),
+                        if (groupData['isUserTaged'])
+                          Container(
+                            height: 20,
+                            width: 20,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              "${groupData['unreadmessage']}",
+                            ),
+                          ),
+                      ],
+                    ),
                     Text(
-                      formatTime(chatData['time']),
-                      style: TextStyle(color: Colors.white),
+                      formatTime(groupData['time']),
+                      style: TextStyle(color: Colors.white, fontSize: 10),
                     ),
                   ],
                 ),
@@ -202,8 +226,57 @@ class _homeGroupsState extends State<homeGroups> {
       );
     }
 
-    return ChatListWidget;
+    return GroupListWidget;
   }
+
+  
+  List<Widget> groupOptions = [
+    Container(
+      child: Row(
+        children: [
+          InkWell(
+            onTap: (){},
+            child: Icon(Icons.phone_callback,color: Colors.white, size: 25,),
+          ),
+          SizedBox(width: 7,),
+          InkWell(
+            onTap: (){},
+            child: Icon(Icons.missed_video_call_rounded ,color: Colors.white, size: 30,),
+          ),
+          SizedBox(width: 7,),
+          InkWell(
+            onTap: (){},
+            child: Icon(Icons.archive ,color: Colors.white, size: 25,),
+          ),
+        ],
+      ),
+    ),
+    Container(
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () {},
+            child: Icon(Icons.checklist, size: 25,color: Colors.white,),
+          ),
+          SizedBox(width: 7,),
+          InkWell(
+            onTap: () {},
+            child: Icon(Icons.push_pin, size: 25,color: Colors.white,),
+          ),
+          SizedBox(width: 7,),
+          InkWell(
+            onTap: () {},
+            child: Icon(Icons.archive, size: 25,color: Colors.white,),
+          ),
+          SizedBox(width: 7,),
+          InkWell(
+            onTap: () {},
+            child: Icon(Icons.delete, size: 25,color: Colors.white,),
+          ),
+        ],
+      ),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -233,49 +306,12 @@ class _homeGroupsState extends State<homeGroups> {
                     "Semua Group",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold
                     ),
                   ),
                 ),
-                Visibility(
-                  visible: isSelectIsClicked,
-                  child: Container(
-                    child: Row(
-                      children: [
-                        IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.checklist),
-                          color: Colors.white,
-                        ),
-                        IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.push_pin),
-                          color: Colors.white,
-                        ),
-                        IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.archive),
-                          color: Colors.white,
-                        ),
-                        IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.delete),
-                          color: Colors.white,
-                        ),
-                        IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.block),
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                if (!isSelectIsClicked) groupOptions[0] else groupOptions[1],
               ],
             ),
           ),
@@ -400,12 +436,10 @@ class _homeGroupsState extends State<homeGroups> {
           SizedBox(
             height: 5,
           ),
-          Container(
-            height: ViewHeight * 0.5,
-            padding: EdgeInsets.all(5),
+          Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
-              child: Column(children: ChatList()),
+              child: Column(children: GroupList()),
             ),
           ),
         ],

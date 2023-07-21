@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:pentafy/home-feature/widgets/userStatusColor.dart';
+import 'package:pentafy/home-feature/widgets/allPosibleToasted.dart';
 
 class homeChats extends StatefulWidget {
   const homeChats({super.key});
@@ -15,6 +19,8 @@ class _homeChatsState extends State<homeChats> {
       isSelectIsClicked = !isSelectIsClicked;
     });
   }
+
+  
 
   List<bool> checkBoxStatusList = [];
   List<int> checkedItemIndex = [];
@@ -34,14 +40,63 @@ class _homeChatsState extends State<homeChats> {
       },
       {
         'username': 'JaneSmith',
-        'status': 'offline',
+        'status': 'coding',
+        'message': 'Hi, how are you?',
+        'unreadmessage': 20,
+        'time': DateTime.now(),
+      },
+      {
+        'username': 'Farhan',
+        'status': 'idle',
         'message': 'Hi, how are you?',
         'unreadmessage': 2,
         'time': DateTime.now(),
       },
       {
         'username': 'Farhan',
-        'status': 'online',
+        'status': 'idle',
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': 'Farhan',
+        'status': 'idle',
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': 'Farhan',
+        'status': 'idle',
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': 'Farhan',
+        'status': 'idle',
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': 'Farhan',
+        'status': 'idle',
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': 'Farhan',
+        'status': 'idle',
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': 'Farhan',
+        'status': 'idle',
         'message': 'Hi, how are you?',
         'unreadmessage': 2,
         'time': DateTime.now(),
@@ -62,6 +117,7 @@ class _homeChatsState extends State<homeChats> {
       final chatData = chatList[i];
       ChatListWidget.add(
         Container(
+          padding: EdgeInsets.only(left: 10, right: 10),
           width: double.infinity,
           height: 65,
           margin: EdgeInsets.only(bottom: 20),
@@ -114,14 +170,19 @@ class _homeChatsState extends State<homeChats> {
                       Positioned(
                         bottom: 0,
                         right: 0,
-                        child: Container(
-                          width: 15,
-                          height: 15,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7.5),
-                            color: chatData['status'] == 'online'
-                                ? Colors.green
-                                : Colors.grey,
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              showDetailStatusUser(context,chatData['status']);
+                            });
+                          },
+                          child: Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(7.5),
+                              color: userStatusColor[chatData['status']],
+                            ),
                           ),
                         ),
                       ),
@@ -176,11 +237,13 @@ class _homeChatsState extends State<homeChats> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Text("${chatData['unreadmessage']}",),
+                        child: Text(
+                          "${chatData['unreadmessage']}",
+                        ),
                       ),
                     Text(
                       formatTime(chatData['time']),
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white,fontSize: 10),
                     ),
                   ],
                 ),
@@ -193,6 +256,59 @@ class _homeChatsState extends State<homeChats> {
 
     return ChatListWidget;
   }
+
+  List<Widget> chatOptions = [
+    Container(
+      child: Row(
+        children: [
+          InkWell(
+            onTap: (){},
+            child: Icon(Icons.phone_callback,color: Colors.white, size: 25,),
+          ),
+          SizedBox(width: 7,),
+          InkWell(
+            onTap: (){},
+            child: Icon(Icons.missed_video_call_rounded ,color: Colors.white, size: 30,),
+          ),
+          SizedBox(width: 7,),
+          InkWell(
+            onTap: (){},
+            child: Icon(Icons.archive ,color: Colors.white, size: 25,),
+          ),
+        ],
+      ),
+    ),
+    Container(
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () {},
+            child: Icon(Icons.checklist, size: 25,color: Colors.white,),
+          ),
+          SizedBox(width: 7,),
+          InkWell(
+            onTap: () {},
+            child: Icon(Icons.push_pin, size: 25,color: Colors.white,),
+          ),
+          SizedBox(width: 7,),
+          InkWell(
+            onTap: () {},
+            child: Icon(Icons.archive, size: 25,color: Colors.white,),
+          ),
+          SizedBox(width: 7,),
+          InkWell(
+            onTap: () {},
+            child: Icon(Icons.delete, size: 25,color: Colors.white,),
+          ),
+          SizedBox(width: 7,),
+          InkWell(
+            onTap: () {},
+            child: Icon(Icons.block, size: 25,color: Colors.white,),
+          ),
+        ],
+      ),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -222,49 +338,13 @@ class _homeChatsState extends State<homeChats> {
                     "Semua Chat",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold
                     ),
                   ),
                 ),
-                Visibility(
-                  visible: isSelectIsClicked,
-                  child: Container(
-                    child: Row(
-                      children: [
-                        IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.checklist),
-                          color: Colors.white,
-                        ),
-                        IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.push_pin),
-                          color: Colors.white,
-                        ),
-                        IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.archive),
-                          color: Colors.white,
-                        ),
-                        IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.delete),
-                          color: Colors.white,
-                        ),
-                        IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.block),
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                //here
+                if (!isSelectIsClicked) chatOptions[0] else chatOptions[1],
               ],
             ),
           ),
@@ -389,9 +469,7 @@ class _homeChatsState extends State<homeChats> {
           SizedBox(
             height: 5,
           ),
-          Container(
-            height: ViewHeight * 0.5,
-            padding: EdgeInsets.all(5),
+          Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(children: ChatList()),
