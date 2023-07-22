@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
-  runApp(ChattingApp());
-}
-
 class ChattingApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -98,6 +94,29 @@ class _ChattingPageState extends State<ChattingPage> {
     }
   }
 
+  void _showPopupMenu() async {
+    await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(100, 100, 0, 0),
+      items: [
+        _buildMenuItem(Icons.call, "Call"),
+        _buildMenuItem(Icons.video_call, "Video Call"),
+        _buildMenuItem(Icons.perm_media, "Media"),
+        _buildMenuItem(Icons.notifications, "Notification"),
+        _buildMenuItem(Icons.color_lens, "Change Color"),
+        _buildMenuItem(Icons.delete, "Delete Chat"),
+      ],
+    );
+  }
+
+  bool isMenuOpen = false;
+
+  void _toggleMenu() {
+    setState(() {
+      isMenuOpen = !isMenuOpen;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,10 +141,10 @@ class _ChattingPageState extends State<ChattingPage> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.menu),
+            icon: Icon(isMenuOpen ? Icons.close : Icons.menu),
             onPressed: () {
-              // Aksi ketika hamburger icon di-tap
-              // Contoh: Tampilkan drawer atau menu samping
+              _showPopupMenu();
+              _toggleMenu();
             },
           ),
         ],
@@ -138,8 +157,7 @@ class _ChattingPageState extends State<ChattingPage> {
               children: [
                 Expanded(
                   child: ListView.builder(
-                    controller:
-                        scrollController, // Gunakan ScrollController pada ListView
+                    controller: scrollController,
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
                       Message message = messages[index];
@@ -199,14 +217,14 @@ class _ChattingPageState extends State<ChattingPage> {
             children: [
               Text(
                 message.content,
-                style: GoogleFonts.molengo(
+                style: GoogleFonts.lato(
                   color: message.isSender ? Colors.white : Colors.black,
                 ),
               ),
               SizedBox(height: 4),
               Text(
                 _formatTime(message.time),
-                style: GoogleFonts.molengo(
+                style: GoogleFonts.lato(
                   color: message.isSender ? Colors.white70 : Colors.black54,
                   fontSize: 12,
                 ),
@@ -216,7 +234,7 @@ class _ChattingPageState extends State<ChattingPage> {
         ),
         if (message.isSender) ...[
           Positioned(
-            right: 5,
+            right: 10,
             bottom: 25,
             child: Column(
               children: [
@@ -265,14 +283,69 @@ class _ChattingPageState extends State<ChattingPage> {
     );
   }
 
+  void _onMenuItemSelected(String item) {
+    // Aksi yang ingin Anda lakukan ketika item menu di-tap
+    // Misalnya, implementasi untuk setiap item menu
+    switch (item) {
+      case "Call":
+        _showSnackbar("Call menu di-tap"); // Contoh aksi untuk "Call" menu
+        break;
+      case "Video Call":
+        _showSnackbar(
+            "Video Call menu di-tap"); // Contoh aksi untuk "Video Call" menu
+        break;
+      case "Media":
+        _showSnackbar("Media menu di-tap"); // Contoh aksi untuk "Media" menu
+        break;
+      case "Notification":
+        _showSnackbar(
+            "Notification menu di-tap"); // Contoh aksi untuk "Notification" menu
+        break;
+      case "Change Color":
+        _showSnackbar(
+            "Change Color menu di-tap"); // Contoh aksi untuk "Change Color" menu
+        break;
+      case "Delete Chat":
+        _showSnackbar(
+            "Delete Chat menu di-tap"); // Contoh aksi untuk "Delete Chat" menu
+        break;
+    }
+
+    // Setelah item menu dipilih, tutup menu hamburger
+    _toggleMenu();
+  }
+
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  PopupMenuItem _buildMenuItem(IconData icon, String title) {
+    return PopupMenuItem(
+      child: Row(
+        children: [
+          Icon(icon),
+          SizedBox(width: 8),
+          Text(title),
+        ],
+      ),
+      onTap: () {
+        // Aksi ketika item di-tap
+        // Contoh: Tampilkan aksi sesuai dengan item yang dipilih
+        _onMenuItemSelected(title);
+      },
+    );
+  }
+
   Widget _buildReadStatus(Message message) {
     Color statusColor;
     String statusText;
     if (message.isRead) {
-      statusColor = Colors.blue; // Pesan dibaca
+      statusColor = Color(0XFF243AFF); // Pesan dibaca
       statusText = 'R';
     } else if (message.isFailed) {
-      statusColor = Colors.red; // Pesan gagal terkirim
+      statusColor = Color(0XFFFF0000); // Pesan gagal terkirim
       statusText = '!';
     } else {
       statusColor = Colors.white; // Pesan belum dibaca
@@ -280,17 +353,17 @@ class _ChattingPageState extends State<ChattingPage> {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      width: 12,
+      height: 12,
+      // padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: statusColor,
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12),
-            topRight: Radius.circular(12),
-            bottomRight: Radius.circular(12)),
-      ),
-      child: Text(
-        statusText,
-        style: TextStyle(color: Colors.black, fontSize: 10),
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(2),
+          bottomRight: Radius.circular(10),
+          bottomLeft: Radius.circular(0),
+        ),
       ),
     );
   }
@@ -377,30 +450,57 @@ class _ChattingPageState extends State<ChattingPage> {
   }
 
   Widget _buildExpandedContainer() {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      height: isContainerVisible ? 250 : 0,
-      width: 50,
-      child: Visibility(
-        visible: isContainerVisible,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            children: [
-              Column(
-                children: [
-                  _buildActionRow(Icons.camera),
-                  _buildActionRow(Icons.insert_drive_file),
-                  _buildActionRow(Icons.image),
-                  _buildActionRow(Icons.contacts),
-                  _buildActionRow(Icons.location_on),
-                ],
-              ),
-            ],
-          ),
-        ),
+    return PopupMenuButton<String>(
+      icon: Icon(Icons.add_circle),
+      onSelected: (String result) {
+        // Aksi ketika salah satu opsi media di-tap
+        // Contoh: Tampilkan aksi sesuai dengan opsi yang dipilih
+        _onMediaOptionSelected(result);
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        _buildMediaOption(Icons.camera, "Camera"),
+        _buildMediaOption(Icons.insert_drive_file, "File"),
+        _buildMediaOption(Icons.image, "Image"),
+        _buildMediaOption(Icons.contacts, "Contacts"),
+        _buildMediaOption(Icons.location_on, "Location"),
+      ],
+    );
+  }
+
+  void _onMediaOptionSelected(String option) {
+    // Aksi yang ingin Anda lakukan ketika opsi media di-tap
+    // Misalnya, implementasi untuk setiap opsi media
+    switch (option) {
+      case "Camera":
+        _showSnackbar("Camera option selected");
+        break;
+      case "File":
+        _showSnackbar("File option selected");
+        break;
+      case "Image":
+        _showSnackbar("Image option selected");
+        break;
+      case "Contacts":
+        _showSnackbar("Contacts option selected");
+        break;
+      case "Location":
+        _showSnackbar("Location option selected");
+        break;
+    }
+
+    // Setelah opsi media dipilih, tutup menu pop-up
+    Navigator.pop(context);
+  }
+
+  PopupMenuEntry<String> _buildMediaOption(IconData icon, String title) {
+    return PopupMenuItem<String>(
+      value: title,
+      child: Row(
+        children: [
+          Icon(icon),
+          SizedBox(width: 8),
+          Text(title),
+        ],
       ),
     );
   }

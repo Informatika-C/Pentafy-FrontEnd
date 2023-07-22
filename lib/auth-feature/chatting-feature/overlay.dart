@@ -1,136 +1,100 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(ChatApp());
-}
-
-class ChatApp extends StatelessWidget {
+class Av extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ChatScreen(),
+      home: Scaffold(
+        appBar: AvBar(),
+        body: Center(
+          child: Text("Halaman Utama"),
+        ),
+      ),
     );
   }
 }
 
-class ChatScreen extends StatefulWidget {
+class AvBar extends StatelessWidget implements PreferredSizeWidget {
   @override
-  _ChatScreenState createState() => _ChatScreenState();
-}
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 
-class _ChatScreenState extends State<ChatScreen> {
-  OverlayEntry? _overlayEntry;
-
-  void _handleTapDown(TapDownDetails details) {
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
-    final tapPosition = renderBox.globalToLocal(details.globalPosition);
-
-    // Remove previous overlay if any
-    _removeOverlay();
-
-    _overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        left: tapPosition.dx,
-        top: tapPosition.dy,
-        child: Container(
-          width: 150,
-          height: 100,
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.blue,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      title: Row(
+        children: [
+          Avatar(),
+          SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconWithTap(
-                icon: Icons.call,
-                onTap: () {
-                  print('Call icon tapped!');
-                  _removeOverlay();
-                },
-              ),
-              IconWithTap(
-                icon: Icons.message,
-                onTap: () {
-                  print('Message icon tapped!');
-                  _removeOverlay();
-                },
-              ),
-              IconWithTap(
-                icon: Icons.video_call,
-                onTap: () {
-                  print('Video call icon tapped!');
-                  _removeOverlay();
-                },
+              Text(
+                "Nama Pengguna",
+                style: TextStyle(fontSize: 18),
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
-
-    Overlay.of(context)?.insert(_overlayEntry!);
-  }
-
-  void _removeOverlay() {
-    if (_overlayEntry != null) {
-      _overlayEntry!.remove();
-      _overlayEntry = null;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Chat App'),
-      ),
-      body: GestureDetector(
-        onTapDown: _handleTapDown,
-        child: Stack(
-          children: [
-            ChatBox(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _removeOverlay(); // Ensure overlay is removed when the screen is disposed.
-    super.dispose();
   }
 }
 
-class ChatBox extends StatelessWidget {
-  const ChatBox({Key? key}) : super(key: key);
-
+class Avatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
-      margin: EdgeInsets.all(20),
+      width: 40,
+      height: 40,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.blue,
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          image: AssetImage(
+              'assets/images/a son of Indonesia.jpg'), // Ganti dengan path gambar avatar Anda
+          fit: BoxFit.cover,
+        ),
       ),
-      child: Text(
-        'This is a chat message box!',
-        style: TextStyle(color: Colors.white),
+      child: Stack(
+        children: [
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+              child: OnlineStatus(isOnline: true),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class IconWithTap extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
+class OnlineStatus extends StatelessWidget {
+  final bool isOnline;
 
-  const IconWithTap({required this.icon, required this.onTap});
+  OnlineStatus({required this.isOnline});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Icon(icon, size: 32, color: Colors.black),
+    return Text(
+      isOnline ? "Online" : "Offline",
+      style: TextStyle(
+        color: isOnline ? Colors.green : Colors.grey,
+        fontSize: 6,
+      ),
     );
   }
 }
