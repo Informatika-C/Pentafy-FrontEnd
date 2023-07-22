@@ -1,17 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pentafy/auth-feature/screens/register_screen.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _konfirmasiController = TextEditingController();
   bool _rememberMe = false;
-  bool _passwordVisible = false;
+  bool passwordVisible = false;
+
+  void _register() {
+    // Anda dapat mengimplementasikan logika login di sini
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    String konfirmasi = _konfirmasiController.text;
+
+    // Untuk sementara, kita hanya mencetak email, password, dan nilai rememberMe
+    print('Email: $email');
+    print('Password: $password');
+    print('Konfirmasi: $konfirmasi');
+    print('Ingat Saya: $_rememberMe');
+  }
+
+  void _onRememberMeChanged(bool? value) {
+    setState(() {
+      _rememberMe = value!;
+    });
+  }
+
+  void _klikdisini() {
+    // Implementasi logika untuk tombol "Lupa Password?" di sini
+    // Misalnya, tampilkan dialog atau navigasikan ke halaman reset password
+    print('Tombol "Lupa Password?" diklik');
+  }
+
+  void _login() {
+    Get.back();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         //This will obscure text dynamically
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          labelText: 'Username/Email',
-                          hintText: 'Masukkan Username/Email ',
+                          labelText: 'Email',
+                          hintText: 'Masukkan Email ',
                           contentPadding: EdgeInsets.only(left: 10),
                           // Here is key idea
                         ),
@@ -91,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.text,
                         controller: _passwordController,
                         obscureText:
-                            !_passwordVisible, //This will obscure text dynamically
+                            !passwordVisible, //This will obscure text dynamically
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           labelText: 'Password',
@@ -100,16 +129,64 @@ class _LoginScreenState extends State<LoginScreen> {
                           // Here is key idea
                           suffixIcon: IconButton(
                             icon: Icon(
-                              // Based on _passwordVisible state choose the icon
-                              !_passwordVisible
+                              // Based on passwordVisible state choose the icon
+                              !passwordVisible
                                   ? Icons.visibility
                                   : Icons.visibility_off,
                               color: Theme.of(context).primaryColorDark,
                             ),
                             onPressed: () {
-                              // Update the state i.e. toogle the state of _passwordVisible variable
+                              // Update the state i.e. toogle the state of passwordVisible variable
                               setState(() {
-                                _passwordVisible = !_passwordVisible;
+                                passwordVisible = !passwordVisible;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors
+                            .white, // Mengatur warna latar belakang tombol menjadi hijau
+                        borderRadius: BorderRadius.circular(
+                            8), // Mengatur radius border tombol
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromARGB(
+                                255, 0, 0, 0), // Warna dan opasitas bayangan
+                            spreadRadius: 2, // Radius penyebaran bayangan
+                            blurRadius: 1, // Radius blur bayangan
+                            offset: Offset(-2, 4), // Posisi bayangan (x, y)
+                          ),
+                        ],
+                      ),
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        controller: _konfirmasiController,
+                        obscureText:
+                            !passwordVisible, //This will obscure text dynamically
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: 'Konfirmasi Password',
+                          hintText: 'Konfirmasi password',
+                          contentPadding: EdgeInsets.only(left: 10),
+                          // Here is key idea
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              !passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                passwordVisible = !passwordVisible;
                               });
                             },
                           ),
@@ -142,8 +219,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: 150,
                           height: 50,
                           decoration: BoxDecoration(
-                            color: Get.theme.colorScheme
-                                .tertiary, // Mengatur warna latar belakang tombol menjadi hijau
+                            color: Color.fromARGB(255, 69, 244,
+                                139), // Mengatur warna latar belakang tombol menjadi hijau
                             borderRadius: BorderRadius.circular(
                                 8), // Mengatur radius border tombol
                             boxShadow: [
@@ -171,31 +248,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 8),
                               child: Text(
-                                'MASUK',
+                                'DAFTAR',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 18),
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Lupa Password ?',
-                          textAlign: TextAlign.right,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        TextButton(
-                            onPressed: _klikdisini,
-                            child: Text(
-                              'Klik Disini',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(color: Colors.black),
-                            ))
                       ],
                     ),
                     SizedBox(height: 16),
@@ -212,9 +271,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         SizedBox(height: 10),
                         TextButton(
-                            onPressed: _daftar,
+                            onPressed: _login,
                             child: Text(
-                              "DAFTAR",
+                              "MASUK",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -244,32 +303,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  void _login() {
-    // Anda dapat mengimplementasikan logika login di sini
-    String email = _emailController.text;
-    String password = _passwordController.text;
-
-    // Untuk sementara, kita hanya mencetak email, password, dan nilai rememberMe
-    print('Email: $email');
-    print('Password: $password');
-    print('Ingat Saya: $_rememberMe');
-  }
-
-  void _onRememberMeChanged(bool? value) {
-    setState(() {
-      _rememberMe = value!;
-    });
-  }
-
-  void _klikdisini() {
-    // Implementasi logika untuk tombol "Lupa Password?" di sini
-    // Misalnya, tampilkan dialog atau navigasikan ke halaman reset password
-    print('Tombol "Lupa Password?" diklik');
-  }
-
-  void _daftar() {
-    Get.to(RegisterScreen());
   }
 }
