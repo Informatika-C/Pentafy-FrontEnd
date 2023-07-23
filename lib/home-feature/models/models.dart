@@ -6,6 +6,8 @@ class ChatHomeModel {
   final RxString status;
   final RxBool ispinned;
   final RxBool isarchived;
+  final RxInt missedcall;
+  final RxInt missedvideocall;
   final RxString message;
   final RxInt unreadmessage;
   final Rx<DateTime> time;
@@ -15,6 +17,8 @@ class ChatHomeModel {
     required this.status,
     required this.ispinned,
     required this.isarchived,
+    required this.missedcall,
+    required this.missedvideocall,
     required this.message,
     required this.unreadmessage,
     required this.time,
