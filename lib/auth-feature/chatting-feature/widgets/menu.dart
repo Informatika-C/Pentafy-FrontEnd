@@ -4,7 +4,7 @@ class HamburgerMenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.menu),
+      icon: Icon(Icons.more_vert),
       onPressed: () {
         _openPopupMenu(context);
       },

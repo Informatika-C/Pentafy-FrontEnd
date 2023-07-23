@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'call_page.dart';
 
 class OverlayWidget extends StatelessWidget {
   @override
@@ -45,15 +46,18 @@ class OverlayWidget extends StatelessWidget {
   PopupMenuItem _buildMenuItem(
       BuildContext context, IconData icon, String title) {
     return PopupMenuItem(
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: Colors.black,
-            size: 30,
-          ),
-          // Text(title),
-        ],
+      child: Container(
+        color: Colors.yellow,
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: Colors.black,
+              size: 30,
+            ),
+            // Text(title),
+          ],
+        ),
       ),
       onTap: () {
         _onMenuItemSelected(context, title);
@@ -62,32 +66,55 @@ class OverlayWidget extends StatelessWidget {
     );
   }
 
-  void _onMenuItemSelected(BuildContext context, String item) {
-    // Aksi yang ingin Anda lakukan ketika item menu di-tap
-    switch (item) {
+  void _onMenuItemSelected(BuildContext context, String title) {
+    switch (title) {
       case "Camera":
-        _showSnackbar(context, "Camera option selected");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                VoiceCallPage(), // Ganti dengan halaman yang sesuai
+          ),
+        );
         break;
       case "File":
-        _showSnackbar(context, "File option selected");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                VoiceCallPage(), // Ganti dengan halaman yang sesuai
+          ),
+        );
         break;
       case "Image":
-        _showSnackbar(context, "Image option selected");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                VoiceCallPage(), // Ganti dengan halaman yang sesuai
+          ),
+        );
         break;
       case "Contacts":
-        _showSnackbar(context, "Contacts option selected");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                VoiceCallPage(), // Ganti dengan halaman yang sesuai
+          ),
+        );
         break;
       case "Location":
-        _showSnackbar(context, "Location option selected");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                VoiceCallPage(), // Ganti dengan halaman yang sesuai
+          ),
+        );
+        break;
+      default:
         break;
     }
-
-    Navigator.pop(context);
-  }
-
-  void _showSnackbar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'overlay.dart';
-// import 'keyboard.dart';
 
 class MessageInputWidget extends StatefulWidget {
   final Function(String) onSendMessage;
@@ -41,9 +40,8 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
             ),
           ),
           IconButton(
-            icon: Icon(Icons.emoji_emotions),
+            icon: Icon(Icons.file_open),
             onPressed: () {
-              // EmojiPickerWidget();
             },
           ),
           IconButton(

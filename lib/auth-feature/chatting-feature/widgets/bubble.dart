@@ -1,3 +1,4 @@
+import 'dart:io'; // Import this for using File class
 import 'package:flutter/material.dart';
 
 class BubbleChatWidget extends StatelessWidget {
@@ -5,12 +6,17 @@ class BubbleChatWidget extends StatelessWidget {
   final bool isMe;
   final DateTime time;
   final MessageStatus status; // Tambahkan properti status
+  final File? imageFile; // Add imageFile property to handle image message
+  final File? videoFile; // Add videoFile property to handle video message
 
-  BubbleChatWidget(
-      {required this.message,
-      required this.isMe,
-      required this.time,
-      required this.status});
+  BubbleChatWidget({
+    required this.message,
+    required this.isMe,
+    required this.time,
+    required this.status,
+    this.imageFile,
+    this.videoFile,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,27 +30,40 @@ class BubbleChatWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            message,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16.0,
+          if (message.isNotEmpty)
+            Text(
+              message,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+              ),
             ),
-          ),
+          if (imageFile != null) // Display image if imageFile is provided
+            Image.file(
+              imageFile!,
+              width: 200,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+          if (videoFile != null) // Display video if videoFile is provided
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: VideoPlayerWidget(videoFile!),
+            ),
           SizedBox(height: 4),
           Row(
             mainAxisAlignment:
                 isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               Text(
-                _formatTime(time), // Panggil _formatTime dengan benar
+                _formatTime(time),
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.white,
                 ),
               ),
               SizedBox(width: 4),
-              _buildStatusIcon(status), // Panggil _buildStatusIcon dengan benar
+              _buildStatusIcon(status),
             ],
           ),
         ],
@@ -64,7 +83,7 @@ class BubbleChatWidget extends StatelessWidget {
     } else if (status == MessageStatus.error) {
       return Icon(Icons.error_outline, color: Colors.white, size: 14);
     } else {
-      return SizedBox(); // Return an empty SizedBox if status is not defined
+      return SizedBox();
     }
   }
 }
@@ -73,4 +92,18 @@ enum MessageStatus {
   sent,
   delivered,
   error,
+}
+
+// Add VideoPlayerWidget to display the video file
+class VideoPlayerWidget extends StatelessWidget {
+  final File videoFile;
+
+  VideoPlayerWidget(this.videoFile);
+
+  @override
+  Widget build(BuildContext context) {
+    // Implement your video player widget here
+    // You can use any video player plugin of your choice to display the video
+    return SizedBox(); // Replace this with your actual video player implementation
+  }
 }

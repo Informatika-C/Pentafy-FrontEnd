@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'widgets/keyboard.dart';
 
 class ChattingApp extends StatelessWidget {
   @override
@@ -508,8 +509,7 @@ class _ChattingPageState extends State<ChattingPage> {
   Widget _buildActionRow(IconData icon) {
     return InkWell(
       onTap: () {
-        // Aksi ketika item di-tap
-        // Contoh: Tampilkan aksi sesuai dengan item yang dipilih
+        T();
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16.0),
