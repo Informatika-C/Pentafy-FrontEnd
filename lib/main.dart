@@ -5,7 +5,7 @@ import 'package:pentafy/auth-feature/screens/login_screen.dart';
 
 import 'package:pentafy/home-feature/screens/homePage.dart';
 void main() {
-  runApp(const HomePage());
+  runApp(const MyApp());
 }
 
 // Parent Widget Tempat Penyimpanan Global State
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: isLogin
-          ? const LoginScreen(title: 'Pentafy')
+          ? const HomePage()
           : const LoginScreen(title: 'Pentafy'),
     );
   }

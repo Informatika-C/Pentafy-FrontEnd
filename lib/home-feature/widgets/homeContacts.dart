@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pentafy/home-feature/widgets/allPosibleToasted.dart';
-
+import 'package:get/get.dart';
 class homeContacts extends StatefulWidget {
   const homeContacts({super.key});
 
@@ -10,21 +10,25 @@ class homeContacts extends StatefulWidget {
 }
 
 class _homeContactsState extends State<homeContacts> {
-  bool isSelectIsClicked = false;
+  bool isOptionSelectClicked = false;
+  List<bool> selectedItem = [];
+  bool isSelectedAll = false;
+
   void _HideActionSelect() {
     setState(() {
-      isSelectIsClicked = !isSelectIsClicked;
+      isOptionSelectClicked = !isOptionSelectClicked;
     });
   }
+  
+  void _selectAll(bool value) {
+    for (var i = 0; i < contactList.length; i++) {
+      selectedItem[i] = value;
+    }
+  }
 
-  List<bool> checkBoxStatusList = [];
-  List<int> checkedItemIndex = [];
-
-  List<Widget> ContactList() {
-    double ViewHeight = MediaQuery.of(context).size.height;
-    double ViewWidth = MediaQuery.of(context).size.width;
-
-    List<Map<String, dynamic>> contactList = [
+  List<Map<String, dynamic>> contactList = [];
+  _homeContactsState(){
+    contactList = [
       {
         'username': 'Fajar Kumolonimbus',
         'status': 'online',
@@ -66,14 +70,22 @@ class _homeContactsState extends State<homeContacts> {
         'time': DateTime.now(),
       },
     ];
+    for (int i = 0; i < contactList.length; i++) {
+      selectedItem.add(false);
+    }
+  }
+
+  List<Widget> ContactList() {
+    double ViewHeight = MediaQuery.of(context).size.height;
+    double ViewWidth = MediaQuery.of(context).size.width;
+
+    
 
     String formatTime(DateTime time) {
       return DateFormat('hh:mm a').format(time);
     }
 
-    for (int i = 0; i < contactList.length; i++) {
-      checkBoxStatusList.add(false);
-    }
+    
 
     List<Widget> ContactListWidget = [];
 
@@ -99,7 +111,7 @@ class _homeContactsState extends State<homeContacts> {
                             NetworkImage("https://picsum.photos/200"),
                       ),
                       Visibility(
-                        visible: isSelectIsClicked,
+                        visible: isOptionSelectClicked,
                         child: Positioned(
                           top: 0,
                           left: 0,
@@ -110,21 +122,12 @@ class _homeContactsState extends State<homeContacts> {
                               fillColor:
                                   MaterialStateProperty.all(Colors.white),
                               checkColor: Colors.blue,
-                              value: checkBoxStatusList[i],
+                              value: selectedItem[i],
                               onChanged: (newValue) {
                                 setState(
                                   () {
-                                    if (newValue != null) {
-                                      checkBoxStatusList[i] = newValue;
-                                      if (newValue) {
-                                        checkedItemIndex.add(
-                                            i); // Tambahkan indeks ke array jika checkbox di-check
-                                      } else {
-                                        checkedItemIndex.remove(
-                                            i); // Hapus indeks dari array jika checkbox di-uncheck
-                                      }
-                                    }
-                                    print(checkedItemIndex);
+                                    selectedItem[i] = !selectedItem[i];
+                                    print(selectedItem);
                                   },
                                 );
                               },
@@ -226,7 +229,11 @@ class _homeContactsState extends State<homeContacts> {
     return ContactListWidget;
   }
 
-List<Widget> contactOptions = [
+
+  
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> contactOptions = [
     Container(
       child: Row(
         children: [
@@ -251,7 +258,13 @@ List<Widget> contactOptions = [
       child: Row(
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                  isSelectedAll = !isSelectedAll;
+                  _selectAll(isSelectedAll);
+                  print(selectedItem);
+                });
+            },
             child: Icon(Icons.checklist, size: 25,color: Colors.white,),
           ),
           SizedBox(width: 7,),
@@ -266,7 +279,16 @@ List<Widget> contactOptions = [
           ),
           SizedBox(width: 7,),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                  int indexToRemove;
+                  while ((indexToRemove = selectedItem.indexOf(true)) != -1) {
+                    contactList.removeAt(indexToRemove);
+                    selectedItem.removeAt(indexToRemove);
+                  }
+                  print(selectedItem);
+                });
+            },
             child: Icon(Icons.delete, size: 25,color: Colors.white,),
           ),
           SizedBox(width: 7,),
@@ -278,172 +300,171 @@ List<Widget> contactOptions = [
       ),
     ),
   ];
-  
-  @override
-  Widget build(BuildContext context) {
     double ViewHeight = MediaQuery.of(context).size.height;
     double ViewWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      height: ViewHeight * 0.7,
-      width: ViewWidth,
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-        color: Colors.black,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.all(10),
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  child: Text(
-                    "Semua Contacts",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          color: Get.theme.colorScheme.secondary,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Text(
+                      "Semua Contacts",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
-                ),
-                if (!isSelectIsClicked) contactOptions[0] else contactOptions[1],
-              ],
+                  if (!isOptionSelectClicked) contactOptions[0] else contactOptions[1],
+                ],
+              ),
             ),
-          ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.symmetric(horizontal: 5),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.add),
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: IconButton(
-                          iconSize: 24,
-                          onPressed: () {
-                            _HideActionSelect();
-                            checkBoxStatusList = [];
-                            checkedItemIndex = [];
-                          },
-                          icon: Icon(Icons.check),
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: IconButton(
-                          iconSize: 24,
-                          onPressed: () {},
-                          icon: Icon(Icons.sort_sharp),
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: ViewWidth * 0.45,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                  ),
-                  child: Stack(
-                    children: [
-                      TextField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                            ), // Warna border saat fokus
-                          ),
-                          hintText: 'Cari Contact',
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 10,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 5,
-                        right: 5,
-                        child: Container(
-                          height: 30,
-                          width: 30,
+            Container(
+              width: double.infinity,
+              height: 50,
+              margin: EdgeInsets.all(5),
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 40,
+                          width: 40,
                           decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: Get.theme.colorScheme.primary,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: IconButton(
-                            iconSize: 15,
+                            iconSize: 24,
                             onPressed: () {},
-                            icon: Icon(Icons.search),
+                            icon: Icon(Icons.add),
                             color: Colors.white,
                           ),
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 5),
+                        Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: Get.theme.colorScheme.primary,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: IconButton(
+                            iconSize: 24,
+                            onPressed: () {
+                              _HideActionSelect();
+                              setState(() {
+                              _selectAll(false);
+                                isSelectedAll = false;
+                              });
+                            },
+                            icon: Icon(Icons.check),
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: Get.theme.colorScheme.primary,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: IconButton(
+                            iconSize: 24,
+                            onPressed: () {},
+                            icon: Icon(Icons.sort_sharp),
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  Container(
+                    width: ViewWidth * 0.45,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: Stack(
+                      children: [
+                        TextField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(
+                                color: Colors.black,
+                              ), // Warna border saat fokus
+                            ),
+                            hintText: 'Cari Contact',
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 10,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 5,
+                          right: 5,
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: IconButton(
+                              iconSize: 15,
+                              onPressed: () {},
+                              icon: Icon(Icons.search),
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(children: ContactList()),
+            SizedBox(
+              height: 5,
             ),
-          ),
-        ],
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(children: ContactList()),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

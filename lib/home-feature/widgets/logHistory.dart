@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:pentafy/home-feature/widgets/userStatusColor.dart';
+import 'package:pentafy/home-feature/widgets/allPosibleToasted.dart';
+import 'package:pentafy/home-feature/screens/homePage.dart';
 
-class homeGroups extends StatefulWidget {
-  const homeGroups({super.key});
+class homeChats extends StatefulWidget {
+  const homeChats({super.key});
 
   @override
-  State<homeGroups> createState() => _homeGroupsState();
+  State<homeChats> createState() => _homeChatsState();
 }
 
-class _homeGroupsState extends State<homeGroups> {
+class _homeChatsState extends State<homeChats> {
   bool isOptionSelectClicked = false;
   List<bool> selectedItem = [];
   bool isSelectedAll = false;
-
 
   void _HideActionSelect() {
     setState(() {
@@ -21,59 +24,113 @@ class _homeGroupsState extends State<homeGroups> {
     });
   }
 
-
   void _selectAll(bool value) {
-    for (var i = 0; i < groupList.length; i++) {
+    for (var i = 0; i < chatList.length; i++) {
       selectedItem[i] = value;
     }
   }
 
-  List<Map<String, dynamic>> groupList = [];
-  _homeGroupsState() {
-    groupList = [
+  List<Map<String, dynamic>> chatList = [];
+  _homeChatsState() {
+    chatList = [
       {
-        'groupname': 'Group Mabar ML',
+        'username': 'Arif',
         'status': 'online',
-        'recentmessage':
-            'From Fajar Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
-        'unreadmessage': 5,
-        'time': DateTime.now(),
-        'isUserTaged': true,
-      },
-      {
-        'groupname': 'Group Mabar EPEP',
-        'status': 'online',
-        'recentmessage':
-            'From Farhan Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
-        'unreadmessage': 2,
-        'time': DateTime.now(),
-        'isUserTaged': true,
-      },
-      {
-        'groupname': 'Group Mabar PUBG',
-        'status': 'online',
-        'recentmessage':
-            'From Adib Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
+        'ispinned': true,
+        'message':
+            'hallo mamang racing, mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
         'unreadmessage': 0,
         'time': DateTime.now(),
-        'isUserTaged': false,
       },
       {
-        'groupname': 'Group Mabar PUBG',
-        'status': 'online',
-        'recentmessage':
-            'From Adit Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
-        'unreadmessage': 1,
+        'username': 'Fajar',
+        'status': 'coding',
+        'ispinned': false,
+        'message': 'Hi, how are you?',
+        'unreadmessage': 20,
         'time': DateTime.now(),
-        'isUserTaged': true,
+      },
+      {
+        'username': 'Adib',
+        'status': 'idle',
+        'ispinned': false,
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': 'Farhan',
+        'status': 'idle',
+        'ispinned': false,
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': 'Adit',
+        'status': 'idle',
+        'ispinned': true,
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': 'John Doe',
+        'status': 'idle',
+        'ispinned': true,
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': '6',
+        'status': 'idle',
+        'ispinned': false,
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': '7',
+        'status': 'idle',
+        'ispinned': false,
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': '8',
+        'status': 'idle',
+        'ispinned': false,
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
+      },
+      {
+        'username': '9',
+        'status': 'idle',
+        'ispinned': false,
+        'message': 'Hi, how are you?',
+        'unreadmessage': 2,
+        'time': DateTime.now(),
       },
     ];
-    for (int i = 0; i < groupList.length; i++) {
+    for (int i = 0; i < chatList.length; i++) {
       selectedItem.add(false);
     }
+    chatList.sort((a, b) {
+      if (a['ispinned'] && !b['ispinned']) {
+        return -1; // a berada di depan b karena a memiliki isPinned true dan b tidak
+      } else if (!a['ispinned'] && b['ispinned']) {
+        return 1; // b berada di depan a karena b memiliki isPinned true dan a tidak
+      } else {
+        return 0; // kedua item tetap pada posisi relatif mereka karena keduanya memiliki isPinned true atau false
+      }
+    });
+    print(selectedItem);
   }
 
-  List<Widget> GroupList() {
+  List<Widget> ChatList() {
     double ViewHeight = MediaQuery.of(context).size.height;
     double ViewWidth = MediaQuery.of(context).size.width;
 
@@ -81,11 +138,11 @@ class _homeGroupsState extends State<homeGroups> {
       return DateFormat('hh:mm a').format(time);
     }
 
-    List<Widget> GroupListWidget = [];
+    List<Widget> ChatListWidget = [];
 
-    for (int i = 0; i < groupList.length; i++) {
-      final groupData = groupList[i];
-      GroupListWidget.add(
+    for (int i = 0; i < chatList.length; i++) {
+      final chatData = chatList[i];
+      ChatListWidget.add(
         Container(
           padding: EdgeInsets.only(left: 10, right: 10),
           width: double.infinity,
@@ -131,14 +188,19 @@ class _homeGroupsState extends State<homeGroups> {
                       Positioned(
                         bottom: 0,
                         right: 0,
-                        child: Container(
-                          width: 15,
-                          height: 15,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7.5),
-                            color: groupData['status'] == 'online'
-                                ? Colors.green
-                                : Colors.grey,
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              showDetailStatusUser(context, chatData['status']);
+                            });
+                          },
+                          child: Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(7.5),
+                              color: userStatusColor[chatData['status']],
+                            ),
                           ),
                         ),
                       ),
@@ -156,9 +218,9 @@ class _homeGroupsState extends State<homeGroups> {
                           height: 3,
                         ),
                         Text(
-                          groupData['groupname'],
+                          chatData['username'],
                           style: TextStyle(
-                            color: Colors.white,
+                            color: chatData['ispinned'] ? Colors.green :Colors.white,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -166,7 +228,7 @@ class _homeGroupsState extends State<homeGroups> {
                           height: 3,
                         ),
                         Text(
-                          groupData['recentmessage'],
+                          chatData['message'],
                           maxLines: 2,
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
@@ -180,13 +242,14 @@ class _homeGroupsState extends State<homeGroups> {
               Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: groupData['unreadmessage'] > 0
-                      ? MainAxisAlignment.spaceBetween
-                      : MainAxisAlignment.end,
+                  mainAxisAlignment:
+                      chatData['unreadmessage'] > 0 || chatData['ispinned']
+                          ? MainAxisAlignment.spaceBetween
+                          : MainAxisAlignment.end,
                   children: [
                     Row(
                       children: [
-                        if (groupData['isUserTaged'])
+                        if (chatData['unreadmessage'] > 0)
                           Container(
                             height: 20,
                             width: 20,
@@ -196,29 +259,29 @@ class _homeGroupsState extends State<homeGroups> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              "#",
+                              "${chatData['unreadmessage']}",
                             ),
                           ),
-                        SizedBox(
-                          width: 2,
-                        ),
-                        if (groupData['isUserTaged'])
+                        if (chatData['ispinned'])
                           Container(
-                            height: 20,
                             width: 20,
+                            height: 20,
+                            margin: EdgeInsets.only(left: 5),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Text(
-                              "${groupData['unreadmessage']}",
+                            child: Icon(
+                              Icons.push_pin,
+                              color: Colors.green,
+                              size: 17,
                             ),
                           ),
                       ],
                     ),
                     Text(
-                      formatTime(groupData['time']),
+                      formatTime(chatData['time']),
                       style: TextStyle(color: Colors.white, fontSize: 10),
                     ),
                   ],
@@ -230,30 +293,19 @@ class _homeGroupsState extends State<homeGroups> {
       );
     }
 
-    return GroupListWidget;
+    return ChatListWidget;
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> groupOptions = [
+    List<Widget> chatOptions = [
       Container(
         child: Row(
           children: [
             InkWell(
               onTap: () {},
               child: Icon(
-                Icons.phone_callback,
-                color: Colors.white,
-                size: 25,
-              ),
-            ),
-            SizedBox(
-              width: 7,
-            ),
-            InkWell(
-              onTap: () {},
-              child: Icon(
-                Icons.missed_video_call_rounded,
+                Icons.history,
                 color: Colors.white,
                 size: 30,
               ),
@@ -319,7 +371,7 @@ class _homeGroupsState extends State<homeGroups> {
                 setState(() {
                   int indexToRemove;
                   while ((indexToRemove = selectedItem.indexOf(true)) != -1) {
-                    groupList.removeAt(indexToRemove);
+                    chatList.removeAt(indexToRemove);
                     selectedItem.removeAt(indexToRemove);
                   }
                   print(selectedItem);
@@ -331,10 +383,25 @@ class _homeGroupsState extends State<homeGroups> {
                 color: Colors.white,
               ),
             ),
+            SizedBox(
+              width: 7,
+            ),
+            InkWell(
+              onTap: () {
+                setState(() {});
+              },
+              child: Icon(
+                Icons.block,
+                size: 25,
+                color: Colors.white,
+              ),
+            ),
           ],
         ),
       ),
     ];
+    final HomePageController HomeController = Get.find();
+
     double ViewHeight = MediaQuery.of(context).size.height;
     double ViewWidth = MediaQuery.of(context).size.width;
 
@@ -357,14 +424,15 @@ class _homeGroupsState extends State<homeGroups> {
                 children: [
                   Container(
                     child: Text(
-                      "Semua Group",
+                      "Semua Chat",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 17,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  if (!isOptionSelectClicked) groupOptions[0] else groupOptions[1],
+                  //here
+                  if (!isOptionSelectClicked) chatOptions[0] else chatOptions[1],
                 ],
               ),
             ),
@@ -393,7 +461,9 @@ class _homeGroupsState extends State<homeGroups> {
                           ),
                           child: IconButton(
                             iconSize: 24,
-                            onPressed: () {},
+                            onPressed: () {
+                              HomeController.setactivePage(2);
+                            },
                             icon: Icon(Icons.add),
                             color: Colors.white,
                           ),
@@ -410,8 +480,8 @@ class _homeGroupsState extends State<homeGroups> {
                             iconSize: 24,
                             onPressed: () {
                               _HideActionSelect();
-                              setState(() {
                               _selectAll(false);
+                              setState(() {
                                 isSelectedAll = false;
                               });
                             },
@@ -457,7 +527,7 @@ class _homeGroupsState extends State<homeGroups> {
                                 color: Colors.black,
                               ), // Warna border saat fokus
                             ),
-                            hintText: 'Cari Group',
+                            hintText: 'Cari Riwayat',
                             contentPadding: EdgeInsets.symmetric(
                               vertical: 10,
                               horizontal: 10,
@@ -494,7 +564,7 @@ class _homeGroupsState extends State<homeGroups> {
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Column(children: GroupList()),
+                child: Column(children: ChatList()),
               ),
             ),
           ],

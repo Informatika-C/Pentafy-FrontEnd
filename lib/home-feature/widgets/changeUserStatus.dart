@@ -16,8 +16,7 @@ class _changeUserStatusState extends State<changeUserStatus> {
     showModalBottomSheet(
       context: ctx,
       builder: (ctx) => Container(
-        height: ViewHeight * 0.55,
-        color: const Color.fromARGB(255, 255, 255, 255),
+        height: ViewHeight * 0.60,
         child: Column(
           children: [
             Divider(),
@@ -30,7 +29,7 @@ class _changeUserStatusState extends State<changeUserStatus> {
                   Text(
                     "Ubah Status",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 17,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),

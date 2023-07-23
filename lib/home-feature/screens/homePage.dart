@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import 'package:pentafy/home-feature/widgets/homeChats.dart';
 import 'package:pentafy/home-feature/widgets/homeGroups.dart';
 import 'package:pentafy/home-feature/widgets/homeContacts.dart';
@@ -14,10 +16,16 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+class HomePageController extends GetxController {
+  RxInt activePage = 0.obs;
+  setactivePage(int index) {
+    activePage.value = index;
+  }
 
+}
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final HomeController = Get.put(HomePageController());
   void _openEndDrawer() {
     _scaffoldKey.currentState!.openEndDrawer();
   }
@@ -33,14 +41,9 @@ class _HomePageState extends State<HomePage> {
 
   ];
 
-  int activePage = 0; // Indeks widget aktif, awalnya adalah indeks 0
+   // Indeks widget aktif, awalnya adalah indeks 0
   Color activePageItemColor = const Color.fromARGB(255, 106, 106, 106);
 
-  void changePage(int index) {
-    setState(() {
-      activePage = index;
-    });
-  }
 
   
 
@@ -59,7 +62,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             height: ViewHeight,
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 20, 110, 183),
+              color: Get.theme.colorScheme.primary,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                   bottomLeft: Radius.circular(20)),
@@ -232,21 +235,22 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Column(
                         children: [
-                          Container(
-                            width: 55,
-                            height: 55,
-                            decoration: BoxDecoration(
-                              color: activePage == 0 ? activePageItemColor :Color.fromARGB(255, 237, 237, 237),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: activePage == 0 ? Colors.white :  Colors.transparent),
-                            ),
-                            child: IconButton(
-                              iconSize: 28,
-                              onPressed: () {
-                                changePage(0);
-                              },
-                              icon: Icon(Icons.chat),
-                              color: activePage == 0 ? Colors.white : Colors.black,
+                          Obx(()=> Container(
+                              width: 55,
+                              height: 55,
+                              decoration: BoxDecoration(
+                                color: HomeController.activePage == 0 ? activePageItemColor :Color.fromARGB(255, 237, 237, 237),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: HomeController.activePage == 0 ? Colors.white :  Colors.transparent),
+                              ),
+                              child: IconButton(
+                                iconSize: 28,
+                                onPressed: () {
+                                  HomeController.setactivePage(0);
+                                },
+                                icon: Icon(Icons.chat),
+                                color: HomeController.activePage == 0 ? Colors.white : Colors.black,
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -262,21 +266,23 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Column(
                         children: [
-                          Container(
-                            width: 55,
-                            height: 55,
-                            decoration: BoxDecoration(
-                              color: activePage == 1 ? activePageItemColor :  Color.fromARGB(255, 237, 237, 237),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: activePage == 1 ? Colors.white : Colors.transparent),
-                            ),
-                            child: IconButton(
-                              iconSize: 28,
-                              onPressed: () {
-                                changePage(1);
-                              },
-                              icon: Icon(Icons.groups_2),
-                              color: activePage == 1 ? Colors.white:Colors.black,
+                          Obx(()=>
+                             Container(
+                              width: 55,
+                              height: 55,
+                              decoration: BoxDecoration(
+                                color: HomeController.activePage == 1 ? activePageItemColor :  Color.fromARGB(255, 237, 237, 237),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: HomeController.activePage == 1 ? Colors.white : Colors.transparent),
+                              ),
+                              child: IconButton(
+                                iconSize: 28,
+                                onPressed: () {
+                                  HomeController.setactivePage(1);
+                                },
+                                icon: Icon(Icons.groups_2),
+                                color: HomeController.activePage == 1 ? Colors.white:Colors.black,
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -290,21 +296,23 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Column(
                         children: [
-                          Container(
-                            width: 55,
-                            height: 55,
-                            decoration: BoxDecoration(
-                              color: activePage == 2 ? activePageItemColor: Color.fromARGB(255, 237, 237, 237),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: activePage == 2 ? Colors.white : Colors.transparent),
-                            ),
-                            child: IconButton(
-                              iconSize: 28,
-                              onPressed: () {
-                                changePage(2);
-                              },
-                              icon: Icon(Icons.contacts_rounded),
-                              color: activePage == 2 ? Colors.white:Colors.black,
+                          Obx(()=>
+                             Container(
+                              width: 55,
+                              height: 55,
+                              decoration: BoxDecoration(
+                                color: HomeController.activePage == 2 ? activePageItemColor: Color.fromARGB(255, 237, 237, 237),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: HomeController.activePage == 2 ? Colors.white : Colors.transparent),
+                              ),
+                              child: IconButton(
+                                iconSize: 28,
+                                onPressed: () {
+                                  HomeController.setactivePage(2);
+                                },
+                                icon: Icon(Icons.contacts_rounded),
+                                color: HomeController.activePage == 2 ? Colors.white:Colors.black,
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -371,7 +379,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              homePages[activePage](),
+              SizedBox(height: 15,),
+              Obx(() => homePages[HomeController.activePage.value]()),
             ],
           ),
         ),
