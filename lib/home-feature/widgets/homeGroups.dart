@@ -38,7 +38,7 @@ class _homeGroupsState extends State<homeGroups> {
             'From Fajar Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
         'unreadmessage': 5,
         'time': DateTime.now(),
-        'isUserTaged': true,
+        'isusertaged': true,
       },
       {
         'groupname': 'Group Mabar EPEP',
@@ -47,7 +47,7 @@ class _homeGroupsState extends State<homeGroups> {
             'From Farhan Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
         'unreadmessage': 2,
         'time': DateTime.now(),
-        'isUserTaged': true,
+        'isusertaged': true,
       },
       {
         'groupname': 'Group Mabar PUBG',
@@ -56,7 +56,7 @@ class _homeGroupsState extends State<homeGroups> {
             'From Adib Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
         'unreadmessage': 0,
         'time': DateTime.now(),
-        'isUserTaged': false,
+        'isusertaged': false,
       },
       {
         'groupname': 'Group Mabar PUBG',
@@ -65,7 +65,7 @@ class _homeGroupsState extends State<homeGroups> {
             'From Adit Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
         'unreadmessage': 1,
         'time': DateTime.now(),
-        'isUserTaged': true,
+        'isusertaged': true,
       },
     ];
     for (int i = 0; i < groupList.length; i++) {
@@ -186,7 +186,7 @@ class _homeGroupsState extends State<homeGroups> {
                   children: [
                     Row(
                       children: [
-                        if (groupData['isUserTaged'])
+                        if (groupData['isusertaged'])
                           Container(
                             height: 20,
                             width: 20,
@@ -202,7 +202,7 @@ class _homeGroupsState extends State<homeGroups> {
                         SizedBox(
                           width: 2,
                         ),
-                        if (groupData['isUserTaged'])
+                        if (groupData['isusertaged'])
                           Container(
                             height: 20,
                             width: 20,

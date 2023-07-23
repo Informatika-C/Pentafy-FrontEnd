@@ -50,47 +50,45 @@ class HomeChatData extends GetxController {
     ),
   ].obs;
 
-  var dataChat = <ChatHomeModel>[].obs;
-  var isArchivedOpen = false.obs;
+  var ChatListNotArchived = <ChatHomeModel>[].obs;
+  var ChatListArchived = <ChatHomeModel>[].obs;
+  var ChatLists = <List<ChatHomeModel>>[].obs;
+
 
   @override
   void onInit() {
     super.onInit();
     separateChatsByArchivedStatus();
+    ChatLists = <List<ChatHomeModel>>[
+      ChatListNotArchived,
+      ChatListArchived,
+    ].obs;
+    sortByPinned();
   }
 
   void separateChatsByArchivedStatus() {
-    dataChat.clear();
-
     for (int i = 0; i < chatList.length; i++) {
       final item = chatList[i];
-      if (item.isarchived.value == isArchivedOpen.value) {
-        dataChat.add(item);
+      if (item.isarchived.value == false) {
+        ChatListNotArchived.add(item);
+      } else {
+        ChatListArchived.add(item);
       }
     }
-    dataChat.sort((a, b) {
-      if (a.ispinned.value && !b.ispinned.value) {
-        return -1;
-      } else if (!a.ispinned.value && b.ispinned.value) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
   }
 
-  void changeDataList() {
-    isArchivedOpen.value = !isArchivedOpen.value;
-    separateChatsByArchivedStatus();
+  void sortByPinned (){
+    for(int i = 0; i < ChatLists.length; i++){
+        ChatLists[i].sort((a, b) {
+        if (a.ispinned.value && !b.ispinned.value) {
+          return -1;
+        } else if (!a.ispinned.value && b.ispinned.value) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    }
   }
 
-  void deleteDataChat(index) {
-    dataChat.removeAt(index);
-    separateChatsByArchivedStatus();
-  }
-
-  void archiveItem(index){
-    dataChat[index].isarchived.value = !dataChat[index].isarchived.value;
-    separateChatsByArchivedStatus();
-  }
 }
