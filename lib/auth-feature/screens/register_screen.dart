@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pentafy/auth-feature/screens/setup_profile_screen.dart';
 import 'package:pentafy/auth-feature/widgets/screen_container_widget.dart';
 
 import '../widgets/costum_button_widget.dart';
@@ -26,6 +27,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     print('Email: $email');
     print('Password: $password');
     print('Konfirmasi: $konfirmasi');
+
+    Get.to(() => SetUpProfileScreen());
   }
 
   void _login() {
