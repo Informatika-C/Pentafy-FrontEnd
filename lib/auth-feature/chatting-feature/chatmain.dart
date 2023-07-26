@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'widgets/avatar.dart';
 import 'widgets/menu.dart';
 import 'widgets/input.dart';
+import '../group-chat/group-chat.dart';
 
 class ChatApp extends StatelessWidget {
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'auth-feature/chatting-feature/chatt.dart';
 import 'auth-feature/chatting-feature/chatmain.dart';
+import 'package:google_fonts/google_fonts.dart';
 // import 'auth-feature/chatting-feature/overlay.dart';
 
 void main() {
@@ -16,6 +17,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        textTheme:
+            GoogleFonts.hammersmithOneTextTheme(Theme.of(context).textTheme),
+
         // This is the theme of your application.
         //
         // TRY THIS: Try running your application with "flutter run". You'll see
