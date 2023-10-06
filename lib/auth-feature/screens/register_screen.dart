@@ -1,37 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pentafy/auth-feature/screens/register_screen.dart';
+import 'package:pentafy/auth-feature/screens/setup_profile_screen.dart';
+import 'package:pentafy/auth-feature/widgets/screen_container_widget.dart';
 
 import '../widgets/costum_button_widget.dart';
 import '../widgets/logo_widget.dart';
-import '../widgets/screen_container_widget.dart';
 import '../widgets/text_input_widget.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  bool _passwordVisible = false;
+  TextEditingController _konfirmasiController = TextEditingController();
+  bool passwordVisible = false;
 
-  void _login() {
+  void _register() {
     String email = _emailController.text;
     String password = _passwordController.text;
+    String konfirmasi = _konfirmasiController.text;
 
     // Untuk sementara, kita hanya mencetak email, password, dan nilai rememberMe
     print('Email: $email');
     print('Password: $password');
+    print('Konfirmasi: $konfirmasi');
+
+    Get.to(() => SetUpProfileScreen());
   }
 
-  void _klikdisini() {
-    print('Tombol "Lupa Password?" diklik');
-  }
-
-  void _daftar() {
-    Get.to(() => RegisterScreen());
+  void _login() {
+    Get.back();
   }
 
   @override
@@ -54,21 +55,43 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 16),
                 TextInputWidget(
                   textController: _passwordController,
-                  labelText: "Password",
-                  hintText: "Masukkan Password",
-                  obscureText: !_passwordVisible,
+                  labelText: 'Password',
+                  hintText: 'Masukkan Password',
+                  obscureText: !passwordVisible,
                   suffixIcon: IconButton(
                     icon: Icon(
-                      // Based on _passwordVisible state choose the icon
-                      !_passwordVisible
+                      // Based on passwordVisible state choose the icon
+                      !passwordVisible
                           ? Icons.visibility
                           : Icons.visibility_off,
                       color: Theme.of(context).primaryColorDark,
                     ),
                     onPressed: () {
-                      // Update the state i.e. toogle the state of _passwordVisible variable
+                      // Update the state i.e. toogle the state of passwordVisible variable
                       setState(() {
-                        _passwordVisible = !_passwordVisible;
+                        passwordVisible = !passwordVisible;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextInputWidget(
+                  textController: _konfirmasiController,
+                  labelText: 'Konfirmasi Password',
+                  hintText: 'Masukkan Konfirmasi Password',
+                  obscureText: !passwordVisible,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      // Based on passwordVisible state choose the icon
+                      !passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    onPressed: () {
+                      // Update the state i.e. toogle the state of passwordVisible variable
+                      setState(() {
+                        passwordVisible = !passwordVisible;
                       });
                     },
                   ),
@@ -78,31 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     CostumButton(
-                      text: 'MASUK',
-                      onPressed: _login,
+                      text: "DAFTAR",
+                      onPressed: _register,
                     ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Lupa Password ?',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    TextButton(
-                      onPressed: _klikdisini,
-                      child: Text(
-                        'Klik Disini',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
                   ],
                 ),
                 SizedBox(height: 16),
@@ -118,9 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(color: Colors.white),
                     ),
                     TextButton(
-                        onPressed: _daftar,
+                        onPressed: _login,
                         child: Text(
-                          "DAFTAR",
+                          "MASUK",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.white),
                         ))
