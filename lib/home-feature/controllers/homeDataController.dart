@@ -218,7 +218,7 @@ class HomeGroupsData extends GetxController {
         } else if (!a.ispinned.value && b.ispinned.value) {
           return 1;
         } else {
-          return 0;
+          return 0 ;
         }
       });
     }
