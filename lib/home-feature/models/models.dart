@@ -27,23 +27,37 @@ class ChatHomeModel {
 
 class GroupHomeModel {
   final RxString groupname;
-  final RxString status;
+  final RxString statusgroup;
   final RxString recentmessage;
+  final RxString recentmessagesender;
+  final RxString senderstatus;
+  final RxBool issenderowner;
+  final RxBool issenderuser;
   final RxInt unreadmessage;
   final RxBool ispinned;
   final RxBool isarchived;
+  final RxInt missedgroupcall;
+  final RxInt missedgroupvideocall;
   final Rx<DateTime> time;
-  final RxString isusertaged;
+  final RxString usertaged;
+  final RxBool isuserowner;
 
   GroupHomeModel({
     required this.groupname,
-    required this.status,
+    required this.statusgroup,
     required this.recentmessage,
+    required this.recentmessagesender,
+    required this.senderstatus,
+    required this.issenderowner,
+    required this.issenderuser,
     required this.unreadmessage,
     required this.ispinned,
     required this.isarchived,
+    required this.missedgroupcall,
+    required this.missedgroupvideocall,
     required this.time,
-    required this.isusertaged,
+    required this.usertaged,
+    required this.isuserowner,
   });
 }
 

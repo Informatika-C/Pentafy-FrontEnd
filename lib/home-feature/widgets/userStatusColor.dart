@@ -22,3 +22,8 @@ import 'package:flutter/material.dart';
     'listening': Colors.blueGrey,
     'watching': Colors.deepOrangeAccent,
   };
+  
+  Map<String, Color> groupStatusColor = {
+    'closed': Colors.red,
+    'open': Colors.green,
+  };

@@ -191,7 +191,7 @@ class _homeChatsState extends State<homeChats> {
                             Container(
                               width: 20,
                               height: 20,
-                              margin: EdgeInsets.only(left: 5),
+                              margin: EdgeInsets.only(left: 2),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -271,10 +271,29 @@ class _homeChatsState extends State<homeChats> {
                     openLogHistory = !openLogHistory;
                   });
                 },
-                child: Icon(
-                  Icons.history,
-                  color: Colors.white,
-                  size: 30,
+                child: Stack(
+                  children: [
+                    Icon(
+                      Icons.history,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                    for (var item in homeChatData.chatList)
+                      if (item.missedcall.value != 0 ||
+                          item.missedvideocall.value != 0)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        ),
+                  ],
                 ),
               ),
             SizedBox(
@@ -289,7 +308,7 @@ class _homeChatsState extends State<homeChats> {
                     openLogHistory = !openLogHistory;
                   }
                 });
-                homeChatData.sortByPinned();
+                homeChatData.originalChatOrder();
               },
               child: Icon(
                 dataType == 0
@@ -338,7 +357,7 @@ class _homeChatsState extends State<homeChats> {
                       print(homeChatData
                           .ChatLists[dataType][indexToPinned].isarchived.value);
                     }
-                    homeChatData.sortByPinned();
+                    homeChatData.originalChatOrder();
                   });
                 },
                 child: Icon(
@@ -542,7 +561,7 @@ class _homeChatsState extends State<homeChats> {
                                 onPressed: () {
                                   setState(() {
                                     isSortIsOpen = !isSortIsOpen;
-                                    homeChatData.sortByPinned();
+                                    homeChatData.originalChatOrder();
                                   });
                                 },
                                 icon: Icon(Icons.sort_sharp),
@@ -620,9 +639,7 @@ class _homeChatsState extends State<homeChats> {
                                 child: IconButton(
                                   iconSize: 24,
                                   onPressed: () {
-                                    setState(() {
-                                      
-                                    });
+                                    setState(() {});
                                   },
                                   icon: Icon(Icons.sort_by_alpha_rounded),
                                   color: Colors.white,
@@ -654,9 +671,7 @@ class _homeChatsState extends State<homeChats> {
                                 child: IconButton(
                                   iconSize: 24,
                                   onPressed: () {
-                                    setState(() {
-                                      
-                                    });
+                                    setState(() {});
                                   },
                                   icon: Icon(Icons.notification_important),
                                   color: Colors.white,
@@ -673,9 +688,7 @@ class _homeChatsState extends State<homeChats> {
                                 child: IconButton(
                                   iconSize: 24,
                                   onPressed: () {
-                                    setState(() {
-                                      
-                                    });
+                                    setState(() {});
                                   },
                                   icon: Icon(Icons.refresh),
                                   color: Colors.white,

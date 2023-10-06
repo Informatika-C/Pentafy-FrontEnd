@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
+import 'package:pentafy/home-feature/controllers/homeDataController.dart';
+import 'package:pentafy/home-feature/widgets/userStatusColor.dart';
 
 class homeGroups extends StatefulWidget {
   const homeGroups({super.key});
@@ -10,10 +12,26 @@ class homeGroups extends StatefulWidget {
 }
 
 class _homeGroupsState extends State<homeGroups> {
+  final HomeGroupsData homeGroupData = Get.put(HomeGroupsData());
   bool isOptionSelectClicked = false;
-  List<bool> selectedItem = [];
+  List<bool> checkStatus = [];
   bool isSelectedAll = false;
+  int dataType = 0;
+  bool openLogHistory = false;
+  bool isSortIsOpen = false;
+  bool toggleAsc = false;
 
+  _homeGroupsState() {
+    refreshData();
+  }
+
+  void refreshData() {
+    checkStatus = [];
+    for (int i = 0; i < homeGroupData.GroupLists[dataType].length; i++) {
+      checkStatus.add(false);
+    }
+    print(checkStatus);
+  }
 
   void _HideActionSelect() {
     setState(() {
@@ -21,70 +39,23 @@ class _homeGroupsState extends State<homeGroups> {
     });
   }
 
-
   void _selectAll(bool value) {
-    for (var i = 0; i < groupList.length; i++) {
-      selectedItem[i] = value;
-    }
-  }
-
-  List<Map<String, dynamic>> groupList = [];
-  _homeGroupsState() {
-    groupList = [
-      {
-        'groupname': 'Group Mabar ML',
-        'status': 'online',
-        'recentmessage':
-            'From Fajar Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
-        'unreadmessage': 5,
-        'time': DateTime.now(),
-        'isusertaged': true,
-      },
-      {
-        'groupname': 'Group Mabar EPEP',
-        'status': 'online',
-        'recentmessage':
-            'From Farhan Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
-        'unreadmessage': 2,
-        'time': DateTime.now(),
-        'isusertaged': true,
-      },
-      {
-        'groupname': 'Group Mabar PUBG',
-        'status': 'online',
-        'recentmessage':
-            'From Adib Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
-        'unreadmessage': 0,
-        'time': DateTime.now(),
-        'isusertaged': false,
-      },
-      {
-        'groupname': 'Group Mabar PUBG',
-        'status': 'online',
-        'recentmessage':
-            'From Adit Kumolonimbus : mari kita hunting bersama mencari loli bersama adit dan parhan dan adib juga',
-        'unreadmessage': 1,
-        'time': DateTime.now(),
-        'isusertaged': true,
-      },
-    ];
-    for (int i = 0; i < groupList.length; i++) {
-      selectedItem.add(false);
+    for (var i = 0; i < homeGroupData.GroupLists[dataType].length; i++) {
+      checkStatus[i] = value;
     }
   }
 
   List<Widget> GroupList() {
     double ViewHeight = MediaQuery.of(context).size.height;
     double ViewWidth = MediaQuery.of(context).size.width;
+    List<Widget> GroupListWidget = [];
 
     String formatTime(DateTime time) {
       return DateFormat('hh:mm a').format(time);
     }
 
-    List<Widget> GroupListWidget = [];
-
-    for (int i = 0; i < groupList.length; i++) {
-      final groupData = groupList[i];
+    for (int i = 0; i < homeGroupData.GroupLists[dataType].length; i++) {
+      final groupData = homeGroupData.GroupLists[dataType][i];
       GroupListWidget.add(
         Container(
           padding: EdgeInsets.only(left: 10, right: 10),
@@ -115,12 +86,12 @@ class _homeGroupsState extends State<homeGroups> {
                               fillColor:
                                   MaterialStateProperty.all(Colors.white),
                               checkColor: Colors.blue,
-                              value: selectedItem[i],
+                              value: checkStatus[i],
                               onChanged: (newValue) {
                                 setState(
                                   () {
-                                    selectedItem[i] = !selectedItem[i];
-                                    print(selectedItem);
+                                    checkStatus[i] = !checkStatus[i];
+                                    print(checkStatus);
                                   },
                                 );
                               },
@@ -136,9 +107,8 @@ class _homeGroupsState extends State<homeGroups> {
                           height: 15,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(7.5),
-                            color: groupData['status'] == 'online'
-                                ? Colors.green
-                                : Colors.grey,
+                            color:
+                                groupStatusColor[groupData.statusgroup.value],
                           ),
                         ),
                       ),
@@ -155,22 +125,73 @@ class _homeGroupsState extends State<homeGroups> {
                         SizedBox(
                           height: 3,
                         ),
-                        Text(
-                          groupData['groupname'],
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
+                        RichText(
+                            overflow: TextOverflow.ellipsis,
+                            text: TextSpan(
+                                style: DefaultTextStyle.of(context).style,
+                                children: [
+                                  TextSpan(
+                                      text: groupData.groupname.value,
+                                      style: TextStyle(
+                                        color: groupData.ispinned.value
+                                            ? const Color.fromARGB(
+                                                255, 95, 255, 100)
+                                            : Colors.white,
+                                      )),
+                                  if (groupData.isuserowner.value)
+                                    TextSpan(
+                                        text: " 👑 (OWNER)",
+                                        style: TextStyle(
+                                          color: Colors.orange,
+                                        )),
+                                ])),
                         SizedBox(
                           height: 3,
                         ),
-                        Text(
-                          groupData['recentmessage'],
+                        RichText(
                           maxLines: 2,
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.white),
+                          text: TextSpan(
+                            style: DefaultTextStyle.of(context).style,
+                            children: [
+                              TextSpan(
+                                text: "From ",
+                                style: TextStyle(
+                                  color: Colors
+                                      .white, // Atur warna untuk teks "From"
+                                ),
+                              ),
+                              TextSpan(
+                                text: groupData.isuserowner.value && groupData.issenderowner.value || groupData.issenderuser.value ? "You" : groupData.recentmessagesender.value,
+                                style: TextStyle(
+                                  color: userStatusColor[groupData.senderstatus
+                                      .value], // Atur warna untuk teks recentmessagesender
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (groupData.issenderowner.value)
+                                TextSpan(
+                                  text: ' 👑',
+                                  style: TextStyle(
+                                      color: Colors.orange, fontSize: 11),
+                                ),
+                              TextSpan(
+                                text: " : ",
+                                style: TextStyle(
+                                  color:
+                                      Colors.white, // Atur warna untuk teks ":"
+                                ),
+                              ),
+                              TextSpan(
+                                text:  "${groupData.usertaged.value != '' ? '#${groupData.usertaged.value} '+ groupData.recentmessage.value : groupData.recentmessage.value}",
+                                style: TextStyle(
+                                  color: Colors
+                                      .white, // Atur warna sesuai dengan status pengguna
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -180,13 +201,13 @@ class _homeGroupsState extends State<homeGroups> {
               Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: groupData['unreadmessage'] > 0
+                  mainAxisAlignment: groupData.unreadmessage.value > 0
                       ? MainAxisAlignment.spaceBetween
                       : MainAxisAlignment.end,
                   children: [
                     Row(
                       children: [
-                        if (groupData['isusertaged'])
+                        if (groupData.usertaged.value != '')
                           Container(
                             height: 20,
                             width: 20,
@@ -202,7 +223,7 @@ class _homeGroupsState extends State<homeGroups> {
                         SizedBox(
                           width: 2,
                         ),
-                        if (groupData['isusertaged'])
+                        if (groupData.unreadmessage.value > 0)
                           Container(
                             height: 20,
                             width: 20,
@@ -212,13 +233,13 @@ class _homeGroupsState extends State<homeGroups> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              "${groupData['unreadmessage']}",
+                              "${groupData.unreadmessage.value}",
                             ),
                           ),
                       ],
                     ),
                     Text(
-                      formatTime(groupData['time']),
+                      formatTime(groupData.time.value),
                       style: TextStyle(color: Colors.white, fontSize: 10),
                     ),
                   ],
@@ -242,18 +263,7 @@ class _homeGroupsState extends State<homeGroups> {
             InkWell(
               onTap: () {},
               child: Icon(
-                Icons.phone_callback,
-                color: Colors.white,
-                size: 25,
-              ),
-            ),
-            SizedBox(
-              width: 7,
-            ),
-            InkWell(
-              onTap: () {},
-              child: Icon(
-                Icons.missed_video_call_rounded,
+                Icons.history,
                 color: Colors.white,
                 size: 30,
               ),
@@ -280,7 +290,7 @@ class _homeGroupsState extends State<homeGroups> {
                 setState(() {
                   isSelectedAll = !isSelectedAll;
                   _selectAll(isSelectedAll);
-                  print(selectedItem);
+                  print(checkStatus);
                 });
               },
               child: Icon(
@@ -318,11 +328,11 @@ class _homeGroupsState extends State<homeGroups> {
               onTap: () {
                 setState(() {
                   int indexToRemove;
-                  while ((indexToRemove = selectedItem.indexOf(true)) != -1) {
-                    groupList.removeAt(indexToRemove);
-                    selectedItem.removeAt(indexToRemove);
+                  while ((indexToRemove = checkStatus.indexOf(true)) != -1) {
+                    homeGroupData.GroupLists[dataType].removeAt(indexToRemove);
+                    checkStatus.removeAt(indexToRemove);
                   }
-                  print(selectedItem);
+                  print(checkStatus);
                 });
               },
               child: Icon(
@@ -364,7 +374,10 @@ class _homeGroupsState extends State<homeGroups> {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  if (!isOptionSelectClicked) groupOptions[0] else groupOptions[1],
+                  if (!isOptionSelectClicked)
+                    groupOptions[0]
+                  else
+                    groupOptions[1],
                 ],
               ),
             ),
@@ -411,7 +424,7 @@ class _homeGroupsState extends State<homeGroups> {
                             onPressed: () {
                               _HideActionSelect();
                               setState(() {
-                              _selectAll(false);
+                                _selectAll(false);
                                 isSelectedAll = false;
                               });
                             },
