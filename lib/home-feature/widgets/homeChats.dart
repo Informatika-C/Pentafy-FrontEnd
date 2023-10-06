@@ -513,7 +513,7 @@ class _homeChatsState extends State<homeChats> {
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
-                                color: Get.theme.colorScheme.primary,
+                                color: Theme.of(context).colorScheme.primary,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: IconButton(
@@ -530,7 +530,7 @@ class _homeChatsState extends State<homeChats> {
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
-                                color: Get.theme.colorScheme.primary,
+                                color: Theme.of(context).colorScheme.primary,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: IconButton(
@@ -633,7 +633,7 @@ class _homeChatsState extends State<homeChats> {
                                 height: 40,
                                 width: 40,
                                 decoration: BoxDecoration(
-                                  color: Get.theme.colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: IconButton(
@@ -650,7 +650,7 @@ class _homeChatsState extends State<homeChats> {
                                 height: 40,
                                 width: 40,
                                 decoration: BoxDecoration(
-                                  color: Get.theme.colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: IconButton(
@@ -665,7 +665,7 @@ class _homeChatsState extends State<homeChats> {
                                 height: 40,
                                 width: 40,
                                 decoration: BoxDecoration(
-                                  color: Get.theme.colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: IconButton(
@@ -682,7 +682,7 @@ class _homeChatsState extends State<homeChats> {
                                 height: 40,
                                 width: 40,
                                 decoration: BoxDecoration(
-                                  color: Get.theme.colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: IconButton(
